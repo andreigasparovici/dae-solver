@@ -9,10 +9,16 @@
 
 class Solver {
 private:
-    Vector<double, SIZE> x;
+    std::vector<Vector<double, SIZE>> values;
     double step{.001};
+
+    double t0;
+    Vector<double, SIZE> x0;
 public:
-    Vector<double, SIZE> solveAt(DAEModel &model, double t1);
+    Solver(double t0, Vector<double, SIZE> x0) : t0(t0), x0(x0) {}
+    void solve(DAEModel &model, double t1);
+
+    std::vector<Vector<double, SIZE>> getValues();
 };
 
 

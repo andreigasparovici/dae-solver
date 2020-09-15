@@ -4,11 +4,11 @@
 
 #include "Solver.h"
 
-Vector<double, SIZE> Solver::solveAt(DAEModel &model, double t1) {
-    double t0 = model.t0;
-    auto x0 = model.x0;
+void Solver::solve(DAEModel &model, double t1) {
+    values.clear();
 
     double t = t0;
+    Vector<double, SIZE> x;
 
     while (t < t1) {
         model.setA(t);
@@ -17,9 +17,13 @@ Vector<double, SIZE> Solver::solveAt(DAEModel &model, double t1) {
 
         x = (model.B * step + model.A).partialPivLu().solve(model.A * x0 - step * model.C);
 
+        values.push_back(x);
+
         x0 = x;
         t += step;
     }
+}
 
-    return x;
+std::vector<Vector<double, SIZE>> Solver::getValues() {
+    return values;
 }
