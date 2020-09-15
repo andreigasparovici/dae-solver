@@ -4,18 +4,7 @@
 
 #include "DAEModel.h"
 
-
-DAEModel::DAEModel(double t0, Vector<double, SIZE> x0) {
-    this->t0 = t0;
-    this->x0 = std::move(x0);
-
-    initA();
-    initB();
-    initC();
-}
-
-
-void DAEModel::initA() {
+void DAEModel::initialize(double t0) {
     A << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, -p.L_MV, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -42,13 +31,7 @@ void DAEModel::initA() {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, p.C_pulmVein, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
-}
 
-void DAEModel::setA(double t) {
-    // A is constant
-}
-
-void DAEModel::initB() {
     B << -p.R_s_LA, 1, -p.E_LA(t0), p.R_s_LA, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             -1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 1, 0, -p.R_MV, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -75,16 +58,7 @@ void DAEModel::initB() {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
             -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1,
             -p.R_P_V, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0;
-}
 
-void DAEModel::setB(double t) {
-    B(0, 2) = -p.E_LA(t);
-    B(3, 5) = -p.E_LV(t);
-    B(10, 12)= -p.E_RA(t);
-    B(13, 15)= -p.E_RV(t);
-}
-
-void DAEModel::initC() {
     C << p.V_0_LA * p.E_LA(t0),
             0,
             0,
@@ -111,6 +85,17 @@ void DAEModel::initC() {
             0,
             0,
             0;
+}
+
+void DAEModel::setA(double t) {
+    // A is constant
+}
+
+void DAEModel::setB(double t) {
+    B(0, 2) = -p.E_LA(t);
+    B(3, 5) = -p.E_LV(t);
+    B(10, 12) = -p.E_RA(t);
+    B(13, 15) = -p.E_RV(t);
 }
 
 void DAEModel::setC(double t) {

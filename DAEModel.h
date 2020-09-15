@@ -19,18 +19,11 @@ class DAEModel {
 private:
     Parameters p;
 
-    void initA();
-    void initB();
-    void initC();
-
 public:
-    double t0{};
-    Vector<double, SIZE> x0{};
-
     Matrix<double, SIZE, SIZE> A, B;
     Vector<double, SIZE> C;
 
-    DAEModel(double t0, Vector<double, SIZE> x0);
+    void initialize(double t0);
 
     void setA(double t);
 
