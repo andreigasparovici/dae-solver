@@ -29,7 +29,7 @@ void ExperimentalElastanceDenormalizer::denormalize() {
 
     for (int i = 0; i < ELASTANCE_SIZE; ++i) {
         timeDenorm[i] = elastanceTime[i] * timeMax;
-        valueDenorm[i] = ((elastanceTime[i] - elastanceMinNorm) * ratio + elastanceMin) * conv / elastanceChar;
+        valueDenorm[i] = ((elastanceValue[i] - elastanceMinNorm) * ratio + elastanceMin) * conv / elastanceChar;
     }
 }
 
@@ -59,7 +59,7 @@ void AnalyticalElastanceDenormalizer::denormalize() {
             maxVal = h1;
         else
             maxVal = h2;
-        k = (elastanceMax - elastanceMax) / maxVal;
+        k = (elastanceMax - elastanceMin) / maxVal;
         valueDenorm[i] = (k * h1 * h2 + elastanceMin) * conv / elastanceChar;
     }
 }
