@@ -25,11 +25,11 @@ public:
 
     void initialize(double t0);
 
-    void setA(double t);
+    void setA(const Vector<double, SIZE>& x, double t);
 
-    void setB(double t);
+    void setB(const Vector<double, SIZE>& x, double t);
 
-    void setC(double t);
+    void setC(const Vector<double, SIZE>& x, double t);
 };
 
 
