@@ -5,6 +5,8 @@
 #include "gtest/gtest.h"
 
 #include <iostream>
+#include <fstream>
+#include <iomanip>
 
 #include "../DAEModel.h"
 #include "../Solver.h"
@@ -52,18 +54,31 @@ TEST(Test, Test) {
 
     model.initialize(t0);
 
-    double t = 5;
+    double t = 1;
 
     std::vector<Vector<double, SIZE>> values;
 
     for (int i = 1; i <= 5; i++) {
+
+        std::ofstream out;
+        out.open("/home/andrei/CLionProjects/dae-solver/solver-" + std::to_string(i)+ ".csv");
+
         Solver solver(t0, x0);
         solver.solve(model, t);
         values = solver.getValues();
+
+        out << "LV pressure,LV volume\n";
+
+        for (auto x: values) {
+            out << std::setprecision(5) << x(4);
+            out << ',';
+            out << std::setprecision(5) << x(5) ;
+            out << '\n';
+        }
+
         x0 = values.back();
+        out.close();
     }
 
-    for (auto x: values) {
-        std::cout << x(4)  / 1333 << ' ' << x(5) << '\n';
-    }
+
 }
