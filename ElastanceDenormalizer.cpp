@@ -66,8 +66,9 @@ void AnalyticalElastanceDenormalizer::denormalize() {
 
 // Linear interpolation function
 double interpolate(double t0, double t1, double x0, double x1, double t) {
-    double theta = atan2(x1 - x0, t1 - t0);
-    return x0 + tan(theta) * (t - t0);
+    double factor = (t1 - t) / (t1 - t0);
+    double x_interp = x1 * factor + x0 * (1 - factor);
+    return x_interp;
 }
 
 // Precompute values
