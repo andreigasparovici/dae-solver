@@ -27,6 +27,8 @@ public:
     void precomputeValues();
 
     double at(double t);
+
+    void exportCsv(const char* filename);
 };
 
 class ExperimentalElastanceDenormalizer : public ElastanceDenormalizer {

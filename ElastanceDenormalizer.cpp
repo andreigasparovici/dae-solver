@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 
 // Constructor
 ElastanceDenormalizer::ElastanceDenormalizer(double elastanceMax, double elastanceMin, double timeMax, double step) {
@@ -13,6 +14,17 @@ ElastanceDenormalizer::ElastanceDenormalizer(double elastanceMax, double elastan
     this->elastanceMax = elastanceMax;
     this->timeMax = timeMax;
     this->step = step;
+}
+
+void ElastanceDenormalizer::exportCsv(const char *filename) {
+    std::ofstream f(filename);
+
+    f << "Time,Value,DenormTime,DenormValue\n";
+
+    for (int i = 0; i < ELASTANCE_SIZE; i++)
+        f << elastanceTime[i] << ',' << elastanceValue[i] << ',' << timeDenorm[i] << ',' << valueDenorm[i] << '\n';
+
+    f.close();
 }
 
 // Experimental elastance denormalization
@@ -27,8 +39,10 @@ void ExperimentalElastanceDenormalizer::denormalize() {
     const double conv = 1333.22;
     const double elastanceChar = 105;
 
+    double maxElastanceTime = *std::max_element(elastanceTime, elastanceTime + ELASTANCE_SIZE);
+
     for (int i = 0; i < ELASTANCE_SIZE; ++i) {
-        timeDenorm[i] = elastanceTime[i] * timeMax;
+        timeDenorm[i] = elastanceTime[i] * timeMax / maxElastanceTime;
         valueDenorm[i] = ((elastanceValue[i] - elastanceMinNorm) * ratio + elastanceMin) * conv / elastanceChar;
     }
 }
@@ -49,8 +63,11 @@ void AnalyticalElastanceDenormalizer::denormalize() {
     const double conv = 1333.22;
     const double elastanceChar = 105;
 
+    double maxElastanceTime = *std::max_element(elastanceTime, elastanceTime + ELASTANCE_SIZE);
+
     for (int i = 0; i < ELASTANCE_SIZE; i++) {
-        timeDenorm[i] = elastanceTime[i] * timeMax;
+        timeDenorm[i] = elastanceTime[i] * timeMax / maxElastanceTime;
+
         g1 = pow((timeDenorm[i] / tau1), m1);
         g2 = pow((timeDenorm[i] / tau2), m2);
         h1 = g1 / (1 + g1);
