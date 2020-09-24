@@ -5,7 +5,7 @@ import numpy as np
 
 fig, ax = plt.subplots(1, 2, sharey=True)
 
-fig.set_size_inches(40, 20)
+fig.set_size_inches(22, 10)
 
 for i in range(1, 6):
     df = pd.read_csv(f'solver-{i}.csv')
@@ -19,12 +19,11 @@ for i in range(1, 6):
 
     for j, col in enumerate(df.columns):
         y = df[col].to_numpy()
-        ax[j].plot(X, y, label=f'{col} {i}')
+        ax[j].plot(X, y, label=f'{col} {i}', marker='.')
         ax[j].set_xlabel('t')
-        # if j == 1:
-        #     ax[j].set_yscale('log')
 
 for j in range(2):
     ax[j].legend()
 
 plt.savefig('solver-out.png')
+
