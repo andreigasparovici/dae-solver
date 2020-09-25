@@ -9,11 +9,13 @@
 #include <Eigen/Dense>
 
 using Eigen::Matrix;
-using Eigen::Vector;
 
-// A(t)x' + B(t)x + C(t) = 0, x=x(t)
+template <typename Type, int Size>
+using Vector = Matrix<Type, Size, 1>;
 
 const size_t SIZE = 26;
+
+// A(t)x' + B(t)x + C(t) = 0, x=x(t)
 
 class DAEModel {
 private:
