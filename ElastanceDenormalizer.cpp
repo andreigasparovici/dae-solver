@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <cassert>
 
 // Constructor
 ElastanceDenormalizer::ElastanceDenormalizer(double elastanceMax, double elastanceMin, double timeMax, double step) {
@@ -107,5 +108,6 @@ void ElastanceDenormalizer::precomputeValues() {
 // Constant time retrieval
 double ElastanceDenormalizer::at(double t) {
     int index = int(t / timeMax * valuePrep.size());
+    assert(index < valuePrep.size());
     return valuePrep[index];
 }
