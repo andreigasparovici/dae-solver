@@ -4,12 +4,10 @@
 
 #include "gtest/gtest.h"
 
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-
 #include "../DAEModel.h"
 #include "../Solver.h"
+
+const char* prefix = "/home/andrei/CLionProjects/dae-solver/";
 
 TEST(SolverPlot, Test) {
     double pressure_0 = 5.5396502175 * 1333;
@@ -59,33 +57,18 @@ TEST(SolverPlot, Test) {
     std::vector<Vector<double, SIZE>> values;
 
     for (int i = 1; i <= 5; i++) {
-
-        std::ofstream out;
-        out.open("/home/andrei/CLionProjects/dae-solver/solver-" + std::to_string(i)+ ".csv");
-
         Solver solver(t0, x0);
         solver.solve(model, t);
         values = solver.getValues();
 
-        out << "LV pressure,LV volume\n";
-
-        for (auto x: values) {
-            out << std::setprecision(5) << x(4);
-            out << ',';
-            out << std::setprecision(5) << x(5) ;
-            out << '\n';
-        }
-
         x0 = values.back();
-        out.close();
+
+        std::string filename = "solver-" + std::to_string(i) + ".csv";
+        solver.exportCsv((prefix + filename).c_str());
     }
-
-
 }
 
 TEST(ElastancePlot, Test) {
-    std::string prefix = "/home/andrei/CLionProjects/dae-solver/";
-
     AnalyticalElastanceDenormalizer Elast_LA{0.207666, 0.083718, 0.3434, 0.714479};
     Elast_LA.denormalize(); Elast_LA.precomputeValues();
 
@@ -98,8 +81,8 @@ TEST(ElastancePlot, Test) {
     ExperimentalElastanceDenormalizer Elast_RV{0.8, 0.02, 0.3419};
     Elast_RV.denormalize(); Elast_RV.precomputeValues();
 
-    Elast_LA.exportCsv((prefix + "elast-la.csv").c_str());
-    Elast_RA.exportCsv((prefix + "elast-ra.csv").c_str());
-    Elast_LV.exportCsv((prefix + "elast-lv.csv").c_str());
-    Elast_RV.exportCsv((prefix + "elast-rv.csv").c_str());
+    Elast_LA.exportCsv((prefix + std::string("elast-la.csv")).c_str());
+    Elast_RA.exportCsv((prefix + std::string("elast-ra.csv")).c_str());
+    Elast_LV.exportCsv((prefix + std::string("elast-lv.csv")).c_str());
+    Elast_RV.exportCsv((prefix + std::string("elast-rv.csv")).c_str());
 }

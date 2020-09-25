@@ -19,6 +19,8 @@ public:
     void solve(DAEModel &model, double t1);
 
     std::vector<Vector<double, SIZE>> getValues();
+
+    void exportCsv(const char* filename);
 };
 
 
