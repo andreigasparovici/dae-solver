@@ -87,7 +87,7 @@ void DAEModel::initialize(double t0) {
             0;
 }
 
-void DAEModel::setA(const Vector<double, SIZE>& x, double t) {
+void DAEModel::setA(const Vector<double, SIZE> &x, double t) {
     // Equation 2
     if (x(3) > x(4)) {
         A.row(2) << 0, 0, 0, -p.L_MV, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
@@ -117,14 +117,42 @@ void DAEModel::setA(const Vector<double, SIZE>& x, double t) {
     }
 }
 
-void DAEModel::setB(const Vector<double, SIZE>& x, double t) {
+void DAEModel::setB(const Vector<double, SIZE> &x, double t) {
     B(0, 2) = -p.E_LA(t);
     B(3, 5) = -p.E_LV(t);
     B(10, 12) = -p.E_RA(t);
     B(13, 15) = -p.E_RV(t);
+
+    // Equation 2
+    if (x(3) > x(4)) {
+        B.row(2) << 0, 1, 0, -p.R_MV, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    } else {
+        B.row(2) << 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    }
+
+    // Equation 5
+    if (x(4) > x(7)) {
+        B.row(5) << 0, 0, 0, 0, 1, 0, -p.R_AV, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    } else {
+        B.row(5) << 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    }
+
+    // Equation 12
+    if (x(11) > x(14)) {
+        B.row(12) << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -p.R_TV, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    } else {
+        B.row(12) << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    }
+
+    // Equation 15
+    if (x(14) > x(7)) {
+        B.row(15) << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 1, 0, -p.R_PV, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    } else {
+        B.row(15) << 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0;
+    }
 }
 
-void DAEModel::setC(const Vector<double, SIZE>& x, double t) {
+void DAEModel::setC(const Vector<double, SIZE> &x, double t) {
     C(0) = p.V_0_LA * p.E_LA(t);
     C(3) = -p.V_0_LV * p.E_LV(t);
     C(10) = p.V_0_RA * p.E_RA(t);
