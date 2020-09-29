@@ -62,7 +62,7 @@ void DAEModel::initialize(double t0) {
     C << p.V_0_LA * p.E_LA(t0),
             0,
             0,
-            -p.V_0_LV * p.E_LV(t0),
+            p.V_0_LV * p.E_LV(t0),
             0,
             0,
             0,
@@ -154,7 +154,7 @@ void DAEModel::setB(const Vector<double, SIZE> &x, double t) {
 
 void DAEModel::setC(const Vector<double, SIZE> &x, double t) {
     C(0) = p.V_0_LA * p.E_LA(t);
-    C(3) = -p.V_0_LV * p.E_LV(t);
+    C(3) = p.V_0_LV * p.E_LV(t);
     C(10) = p.V_0_RA * p.E_RA(t);
     C(13) = p.V_0_RV * p.E_RV(t);
 }
