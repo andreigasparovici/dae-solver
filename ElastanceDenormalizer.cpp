@@ -40,10 +40,10 @@ void ExperimentalElastanceDenormalizer::denormalize() {
     const double conv = 1333.22;
     const double elastanceChar = 105;
 
-    double maxElastanceTime = *std::max_element(elastanceTime, elastanceTime + ELASTANCE_SIZE);
-
+    double timeAtMaxElastanceNormalized = 1.0;
+    
     for (int i = 0; i < ELASTANCE_SIZE; ++i) {
-        timeDenorm[i] = elastanceTime[i] * timeMax / maxElastanceTime;
+        timeDenorm[i] = elastanceTime[i] * timeMax / timeAtMaxElastanceNormalized;
         valueDenorm[i] = ((elastanceValue[i] - elastanceMinNorm) * ratio + elastanceMin) * conv / elastanceChar;
     }
 }
@@ -64,10 +64,10 @@ void AnalyticalElastanceDenormalizer::denormalize() {
     const double conv = 1333.22;
     const double elastanceChar = 105;
 
-    double maxElastanceTime = *std::max_element(elastanceTime, elastanceTime + ELASTANCE_SIZE);
+    double timeAtMaxElastanceNormalized = 1.0;
 
     for (int i = 0; i < ELASTANCE_SIZE; i++) {
-        timeDenorm[i] = elastanceTime[i] * timeMax / maxElastanceTime;
+        timeDenorm[i] = elastanceTime[i] * timeMax / timeAtMaxElastanceNormalized;
 
         g1 = pow((timeDenorm[i] / tau1), m1);
         g2 = pow((timeDenorm[i] / tau2), m2);
