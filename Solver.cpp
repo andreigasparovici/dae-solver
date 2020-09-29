@@ -20,7 +20,7 @@ void Solver::solve(DAEModel &model, double t1) {
         model.setB(x0, t);
         model.setC(x0, t);
 
-        x = (model.B * step + model.A).partialPivLu().solve(model.A * x0 - step * model.C);
+        x = ((model.B + model.A / step).partialPivLu().solve(model.A * x0 / step - model.C));
 
         values.push_back(x);
 
