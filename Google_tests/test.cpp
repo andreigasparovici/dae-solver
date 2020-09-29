@@ -52,7 +52,7 @@ TEST(SolverPlot, Test) {
 
     model.initialize(t0);
 
-    double t = .3;
+    double t = 1.03;
 
     std::vector<Vector<double, SIZE>> values;
 
