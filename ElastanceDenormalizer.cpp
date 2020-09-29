@@ -85,7 +85,7 @@ void AnalyticalElastanceDenormalizer::denormalize() {
 // Linear interpolation function
 double interpolate(double t0, double t1, double x0, double x1, double t) {
     double factor = (t1 - t) / (t1 - t0);
-    double x_interp = x1 * factor + x0 * (1 - factor);
+    double x_interp = x0 * factor + x1 * (1 - factor);
     return x_interp;
 }
 
