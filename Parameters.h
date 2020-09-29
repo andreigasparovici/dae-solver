@@ -33,7 +33,7 @@ public:
 
     double V_0_LA{3};
     double V_0_RA{3};
-    double V_0_LV{84.1716};
+    double V_0_LV{84.171607};
     double V_0_RV{33.000748};
     double R_s_LA{0};
     double R_s_RA{0};
