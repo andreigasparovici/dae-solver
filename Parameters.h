@@ -11,7 +11,7 @@ class Parameters {
 private:
     AnalyticalElastanceDenormalizer Elast_LA{0.207666, 0.083718, 0.3434, 0.714479};
     AnalyticalElastanceDenormalizer Elast_RA{0.04, 0.02, 0.3434, 0.85};
-    ExperimentalElastanceDenormalizer Elast_LV{6.277778, 0.02, 0.351842};
+    ExperimentalExtendedElastanceDenormalizer Elast_LV{6.277778, 0.02, 0.351842, /*0.617115*/3.0*0.351842 }; // TODO: de vazut ce valoare trebuie aici
     ExperimentalElastanceDenormalizer Elast_RV{0.8, 0.02, 0.3419};
 
 public:
