@@ -7,7 +7,7 @@
 #include "../DAEModel.h"
 #include "../Solver.h"
 
-const char* prefix = "/home/andrei/CLionProjects/dae-solver/";
+const char* prefix = "";
 
 TEST(SolverPlot, Test) {
     double pressure_0 = 5.5396502175 * 1333;
@@ -52,20 +52,17 @@ TEST(SolverPlot, Test) {
 
     model.initialize(t0);
 
+
     double t = 1.03;
 
     std::vector<Vector<double, SIZE>> values;
 
-    for (int i = 1; i <= 5; i++) {
-        Solver solver(t0, x0);
-        solver.solve(model, t);
-        values = solver.getValues();
+    Solver solver(t0, x0);
+    solver.solve(model, t);
+    values = solver.getValues();
 
-        x0 = values.back();
-
-        std::string filename = "solver-" + std::to_string(i) + ".csv";
-        solver.exportCsv((prefix + filename).c_str());
-    }
+    std::string filename = "solver_output.csv";
+    solver.exportCsv((prefix + filename).c_str());
 }
 
 TEST(ElastancePlot, Test) {
@@ -75,7 +72,7 @@ TEST(ElastancePlot, Test) {
     AnalyticalElastanceDenormalizer Elast_RA{0.04, 0.02, 0.3434, 0.85};
     Elast_RA.denormalize(); Elast_RA.precomputeValues();
 
-    ExperimentalElastanceDenormalizer Elast_LV{6.277778, 0.02, 0.351842};
+    ExperimentalExtendedElastanceDenormalizer Elast_LV{6.277778, 0.02, 0.351842, 0.617115};
     Elast_LV.denormalize(); Elast_LV.precomputeValues();
 
     ExperimentalElastanceDenormalizer Elast_RV{0.8, 0.02, 0.3419};

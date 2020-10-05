@@ -11,16 +11,16 @@
 
 class ElastanceDenormalizer {
 protected:
-    double elastanceMax, elastanceMin, timeMax;
+    double elastanceMax, elastanceMin, timeAtMaxElastance;
     double step{};
 
-    double timeDenorm[ELASTANCE_SIZE]{};
-    double valueDenorm[ELASTANCE_SIZE]{};
-
+    std::array<double, ELASTANCE_SIZE> timeDenorm;
+    std::array<double, ELASTANCE_SIZE> valueDenorm;
+    
     std::vector<double> valuePrep{};
 
 public:
-    explicit ElastanceDenormalizer(double elastanceMax, double elastanceMin, double timeMax, double step = 0.001);
+    explicit ElastanceDenormalizer(double elastanceMax, double elastanceMin, double timeAtMaxElastance, double step = 0.001);
 
     virtual void denormalize() = 0;
 
@@ -31,27 +31,46 @@ public:
     void exportCsv(const char* filename);
 };
 
+class ExperimentalExtendedElastanceDenormalizer : public ElastanceDenormalizer {
+public:
+    explicit ExperimentalExtendedElastanceDenormalizer(
+            double elastanceMax, double elastanceMin, double timeAtMaxElastance, double endTime,
+            double step = 0.001) : ElastanceDenormalizer(elastanceMax, elastanceMin, timeAtMaxElastance, step) 
+    {
+        m_endTime = endTime;
+    }
+
+    void denormalize() override;
+private:
+    double m_endTime;
+};
+
 class ExperimentalElastanceDenormalizer : public ElastanceDenormalizer {
 public:
     explicit ExperimentalElastanceDenormalizer(
-            double elastanceMax, double elastanceMin, double timeMax,
-            double step = 0.001) : ElastanceDenormalizer(elastanceMax, elastanceMin, timeMax, step) {}
+        double elastanceMax, double elastanceMin, double timeAtMaxElastance,
+        double step = 0.001) : ElastanceDenormalizer(elastanceMax, elastanceMin, timeAtMaxElastance, step){}
+    
+    
 
     void denormalize() override;
+private:
+    double m_endTime;
 };
 
 class AnalyticalElastanceDenormalizer : public ElastanceDenormalizer {
 public:
     explicit AnalyticalElastanceDenormalizer(
-            double elastanceMax, double elastanceMin, double timeMax, double heartCyclePeriod,
-            double step = 0.001) : ElastanceDenormalizer(elastanceMax, elastanceMin, timeMax, step) {
-        this->heartCyclePeriod = heartCyclePeriod;
+            double elastanceMax, double elastanceMin, double timeAtMaxElastance, double timeOnsetContraction,
+            double step = 0.001) : ElastanceDenormalizer(elastanceMax, elastanceMin, timeAtMaxElastance, step) {
+        m_timeOnsetContraction = timeOnsetContraction;
+
     }
 
     void denormalize() override;
 
 private:
-    double heartCyclePeriod;
+    double m_timeOnsetContraction;
 };
 
 #endif //DAE_SOLVER_ELASTANCEDENORMALIZER_H

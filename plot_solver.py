@@ -22,8 +22,6 @@ for i in range(1, iterations + 1):
         ax[j].plot(X, y, label=str(i), marker='.')
         ax[j].set_xlabel('t')
         ax[j].set_ylabel(col)
-        if j == 1:
-            ax[j].set_yscale('log')
 
 for j in range(2):
     ax[j].legend()
