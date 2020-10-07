@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <array>
 
 void Solver::solve(DAEModel &model, double t1) {
     values.clear();
@@ -36,12 +37,24 @@ std::vector<Vector<double, SIZE>> Solver::getValues() {
 void Solver::exportCsv(const char *filename) {
     std::ofstream f(filename);
 
-    f << "LV pressure,LV volume\n";
+    const char *columns[] = {
+            "Q_{LA-in}", "P_{LA}", "V_{LA}", "Q_{LA-LV}", "P_{LV}", "V_{LV}", "Q_{Ao}", "P_{Ao}", "P_{Sart}",
+            "Q_{Csys}", "Q_{RA-in}", "P_{RA}", "V_{RA}", "Q_{RA-RV}", "P_{RV}", "V_{RV}", "Q_{PAo}", "P_{PAo}",
+            "P_{Part}", "Q_{Cpulm}", "P_{SystCap}", "Q_{SystCap}", "Q_{CSystVein}", "P_{PulmCap}", "Q_{PulmCap}",
+            "Q_{CPulmVein}"
+    };
+
+
+    f << columns[0];
+    for (int i = 1; i < SIZE; ++i)
+        f << ',' << columns[i];
+
+    f << '\n';
 
     for (auto x: values) {
-        f << std::setprecision(5) << x(4);
-        f << ',';
-        f << std::setprecision(5) << x(5) ;
+        f << std::setprecision(5) << x(0);
+        for (int i = 1; i < x.size(); i++)
+            f << ',' << std::setprecision(5) << x(i);
         f << '\n';
     }
 
