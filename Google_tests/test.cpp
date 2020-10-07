@@ -7,10 +7,10 @@
 #include "../DAEModel.h"
 #include "../Solver.h"
 
-const char* prefix = "";
+const char* prefix = "/home/andrei/CLionProjects/dae-solver/";
 
 TEST(SolverPlot, Test) {
-    double pressure_0 = 5.5396502175 * 1333;
+    double pressure_0 = 5.5396502175 * 1333.3;
     double volume_0 = 147.6837;
 
     double Q_LAin_0 = 0;
@@ -53,7 +53,7 @@ TEST(SolverPlot, Test) {
     model.initialize(t0);
 
 
-    double t = 1.03;
+    double t = 5;
 
     std::vector<Vector<double, SIZE>> values;
 
